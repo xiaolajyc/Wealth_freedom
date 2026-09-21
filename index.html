@@ -270,20 +270,21 @@ canvas{width:100%;height:220px;display:block}
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 </head><body><main class="app">
-<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V1.1</div></div></header>
+<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V1.2</div></div></header>
 <div id="tab-home" class="tab-page active"><div class="hint" style="margin:0 3px 10px">输入今天的 PE，立即查看本月建议</div><section class="card"><h2 class="title">本月智能定投</h2><label>纳斯达克 5年 PE</label><input id="pe" type="number" inputmode="decimal" step=".01" placeholder="例如 38.5"><div style="height:11px"></div><label>TQQQ · MA200</label><div class="ma"><button id="above" class="active">高于 MA200</button><button id="below">低于 MA200</button></div></section>
 <section class="card result"><div class="head"><div class="asset">🇨🇳 国内 QQQ</div><div id="qb" class="badge">等待 PE</div></div><div id="qs" class="state">输入 PE 后自动计算</div><div id="qa" class="amount">—</div><div id="qr" class="rule">策略金额</div><button id="rq" class="primary">记录本次定投</button></section>
 <section class="card result"><div class="head"><div class="asset">🇺🇸 国外 TQQQ</div><div id="tb" class="badge">等待输入</div></div><div id="ts" class="state">PE + MA200 自动计算</div><div id="ta" class="amount">—</div><div id="tr" class="rule">策略金额</div><button id="rt" class="primary">记录本次定投</button></section>
 </div>
-<div id="tab-records" class="tab-page"><section class="card"><h2 class="title">☁️ Google Drive 多设备同步</h2><div id="driveStatus" class="drive-status">未连接</div><div class="drive-actions"><button id="driveConnect" class="primary">连接 Google Drive</button><button id="driveUpload" class="secondary">上传到云端</button><button id="driveDownload" class="secondary">从云端恢复</button></div><div id="syncProgress" class="sync-progress"><div class="sync-progress-track"><div id="syncBar" class="sync-progress-bar"></div></div><div class="sync-progress-text"><span id="syncText">准备同步…</span><span id="syncPct">0%</span></div></div><div class="drive-note">同步本应用的基准金额、定投记录、历史价值快照和当前设置。数据同时保存在本机。首次连接会弹出 Google 授权窗口。</div></section><section class="card"><h2 class="title">投资概览</h2><div class="statgrid"><div class="stat"><div class="k">QQQ 累计投入</div><div id="qt" class="v">¥0</div></div><div class="stat"><div class="k">TQQQ 累计投入</div><div id="tt" class="v">$0</div></div></div></section>
+<div id="tab-records" class="tab-page"><section class="card"><h2 class="title">投资概览</h2><div class="statgrid"><div class="stat"><div class="k">QQQ 累计投入</div><div id="qt" class="v">¥0</div></div><div class="stat"><div class="k">TQQQ 累计投入</div><div id="tt" class="v">$0</div></div></div></section>
 <section class="card"><h2 class="title">📒 定投记录 <span id="count" class="tiny">0笔</span></h2><div id="records" class="table"></div></section>
 <section class="card"><h2 class="title">添加过去的定投记录</h2><div class="record"><div><label>日期</label><input id="rd" type="date"></div><div><label>标的</label><select id="ra"><option value="qqq">QQQ</option><option value="tqqq">TQQQ</option></select></div><div><label>金额</label><input id="ram" type="number" inputmode="decimal"></div></div><button id="add" class="primary">添加记录</button></section>
-</main></div>
+</div>
 <div id="tab-assets" class="tab-page"><section class="card"><h2 class="title">当前价值 & 收益</h2><div class="grid2"><div><label>QQQ 当前价值</label><input id="qv" type="number" inputmode="decimal"></div><div><label>TQQQ 当前价值</label><input id="tv" type="number" inputmode="decimal"></div></div><button id="snapshot" class="primary">保存当前价值快照</button><div class="hint">保存快照后用于收益曲线和 XIRR。</div></section>
 <section class="card"><h2 class="title">📸 历史价值快照</h2><div id="snapshots" class="table"></div></section><section class="card"><h2 class="title">收益分析</h2><div id="analysisHint" class="hint"></div><div class="statgrid"><div class="stat"><div class="k">QQQ 累计收益</div><div id="qp" class="v">—</div></div><div class="stat"><div class="k">QQQ 累计收益率</div><div id="qrtn" class="v">—</div></div><div class="stat"><div class="k">QQQ XIRR 年化</div><div id="qx" class="v">—</div></div><div class="stat"><div class="k">TQQQ 累计收益</div><div id="tp" class="v">—</div></div><div class="stat"><div class="k">TQQQ 累计收益率</div><div id="trtn" class="v">—</div></div><div class="stat"><div class="k">TQQQ XIRR 年化</div><div id="tx" class="v">—</div></div></div></section>
 <section class="card"><h2 class="title">📈 收益曲线</h2><div class="actions"><button id="cq" class="secondary" style="color:var(--primary)">QQQ</button><button id="ct" class="secondary">TQQQ</button></div><canvas id="chart"></canvas><div class="legend"><span><i class="dot"></i>资产价值</span>　<span><i class="dot dot2"></i>累计投入</span></div></section>
 </div>
-<div id="tab-settings" class="tab-page"><div class="hint" style="margin:0 3px 10px">应用参数与多设备同步</div><section class="card"><h2 class="title">设置</h2><div class="grid2"><div><label>版本</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:14px;font-weight:700">V4.2</div></div><div><label>数据存储</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:12px;color:#596477">本机 + Google Drive</div></div></div><div class="hint">V4.1：增加 Google Drive 多设备同步；支持上传、恢复、连接状态与同步进度。</div></section><section class="card"><h2 class="title">基准金额</h2><div class="grid2"><div><label>🇨🇳 QQQ · 1份</label><input id="qbv" type="number" inputmode="decimal"></div><div><label>🇺🇸 TQQQ · 1份</label><input id="tbv" type="number" inputmode="decimal"></div></div><button id="savebase" class="primary">保存基准金额</button></section>
+<div id="tab-settings" class="tab-page"><div class="hint" style="margin:0 3px 10px">应用参数与多设备同步</div><section class="card"><h2 class="title">☁️ Google Drive 多设备同步</h2><div id="driveStatus" class="drive-status">未连接</div><div class="drive-actions"><button id="driveConnect" class="primary">连接 Google Drive</button><button id="driveUpload" class="secondary">上传到云端</button><button id="driveDownload" class="secondary">从云端恢复</button></div><div id="syncProgress" class="sync-progress"><div class="sync-progress-track"><div id="syncBar" class="sync-progress-bar"></div></div><div class="sync-progress-text"><span id="syncText">准备同步…</span><span id="syncPct">0%</span></div></div><div class="drive-note">同步本应用的基准金额、定投记录、历史价值快照和当前设置。数据同时保存在本机。首次连接会弹出 Google 授权窗口。</div></section>
+<section class="card"><h2 class="title">设置</h2><div class="grid2"><div><label>版本</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:14px;font-weight:700">V4.2 · PWA 1.2</div></div><div><label>数据存储</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:12px;color:#596477">本机 + Google Drive</div></div></div><div class="hint">V1.2：Google Drive 同步统一放入设置；优化 PWA 更新机制。</div></section><section class="card"><h2 class="title">基准金额</h2><div class="grid2"><div><label>🇨🇳 QQQ · 1份</label><input id="qbv" type="number" inputmode="decimal"></div><div><label>🇺🇸 TQQQ · 1份</label><input id="tbv" type="number" inputmode="decimal"></div></div><button id="savebase" class="primary">保存基准金额</button></section>
 </div>
 <nav class="bottom-nav">
 <button class="tab-btn active" data-tab="home"><span>🏠</span><small>定投</small></button>
@@ -350,8 +351,13 @@ $('driveConnect').onclick=driveConnect;$('driveUpload').onclick=driveUpload;$('d
 </script>
 <script>
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW registration failed', err));
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js');
+      if (reg.update) await reg.update();
+    } catch (err) {
+      console.warn('SW registration failed', err);
+    }
   });
 }
 </script>
