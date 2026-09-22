@@ -1,8 +1,8 @@
 {
   "name": "财富自由",
   "short_name": "财富自由",
-  "description": "纳斯达克智能定投与投资追踪 · PWA V1.2",
-  "start_url": "./index.html",
+  "description": "纳斯达克智能定投与投资追踪",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
