@@ -262,7 +262,7 @@ canvas{width:100%;height:220px;display:block}
   .record{grid-template-columns:1fr 78px 88px}
 }
 </style><meta name="theme-color" content="#3563f5"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="财富自由"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"></head><body><main class="app">
-<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V1.3</div></div></header>
+<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V1.4</div></div></header>
 <div id="tab-home" class="tab-page active"><div class="hint" style="margin:0 3px 10px">输入今天的 PE，立即查看本月建议</div><section class="card"><h2 class="title">本月智能定投</h2><label>纳斯达克 5年 PE</label><input id="pe" type="number" inputmode="decimal" step=".01" placeholder="例如 38.5"><div style="height:11px"></div><label>TQQQ · MA200</label><div class="ma"><button id="above" class="active">高于 MA200</button><button id="below">低于 MA200</button></div></section>
 <section class="card result"><div class="head"><div class="asset">🇨🇳 国内 QQQ</div><div id="qb" class="badge">等待 PE</div></div><div id="qs" class="state">输入 PE 后自动计算</div><div id="qa" class="amount">—</div><div id="qr" class="rule">策略金额</div><button id="rq" class="primary">记录本次定投</button></section>
 <section class="card result"><div class="head"><div class="asset">🇺🇸 国外 TQQQ</div><div id="tb" class="badge">等待输入</div></div><div id="ts" class="state">PE + MA200 自动计算</div><div id="ta" class="amount">—</div><div id="tr" class="rule">策略金额</div><button id="rt" class="primary">记录本次定投</button></section>
@@ -271,7 +271,21 @@ canvas{width:100%;height:220px;display:block}
 <section class="card"><h2 class="title">📒 定投记录 <span id="count" class="tiny">0笔</span></h2><div id="records" class="table"></div></section>
 <section class="card"><h2 class="title">添加过去的定投记录</h2><div class="record"><div><label>日期</label><input id="rd" type="date"></div><div><label>标的</label><select id="ra"><option value="qqq">QQQ</option><option value="tqqq">TQQQ</option></select></div><div><label>金额</label><input id="ram" type="number" inputmode="decimal"></div></div><button id="add" class="primary">添加记录</button></section>
 </main></div>
-<div id="tab-assets" class="tab-page"><section class="card"><h2 class="title">当前价值 & 收益</h2><div class="grid2"><div><label>QQQ 当前价值</label><input id="qv" type="number" inputmode="decimal"></div><div><label>TQQQ 当前价值</label><input id="tv" type="number" inputmode="decimal"></div></div><button id="snapshot" class="primary">保存当前价值快照</button><div class="hint">保存快照后用于收益曲线、XIRR 和简单复合年化。</div></section>
+<div id="tab-assets" class="tab-page"><section class="card">
+<h2 class="title">策略对比</h2>
+<div class="hint" style="margin-bottom:12px">将实际智能定投与按相同基准金额固定定投进行对比。</div>
+<div class="statgrid">
+<div class="stat"><div class="k">智能定投投入</div><div class="v" id="cmpSmartInvested">—</div></div>
+<div class="stat"><div class="k">普通定投投入</div><div class="v" id="cmpRegularInvested">—</div></div>
+<div class="stat"><div class="k">智能定投市值</div><div class="v" id="cmpSmartValue">—</div></div>
+<div class="stat"><div class="k">普通定投市值</div><div class="v" id="cmpRegularValue">—</div></div>
+<div class="stat"><div class="k">智能定投收益率</div><div class="v" id="cmpSmartReturn">—</div></div>
+<div class="stat"><div class="k">普通定投收益率</div><div class="v" id="cmpRegularReturn">—</div></div>
+<div class="stat" style="grid-column:1/-1"><div class="k">智能定投相对普通定投</div><div class="v" id="cmpExcess">—</div><div class="tiny" id="cmpExcessHint">需要每笔定投的价格数据。</div></div>
+</div>
+<div style="margin-top:13px"><div class="k" style="font-size:10px;color:var(--muted);margin-bottom:6px">策略价值曲线</div><canvas id="strategyChart" height="210"></canvas></div>
+</section>
+<section class="card"><h2 class="title">当前价值 & 收益</h2><div class="grid2"><div><label>QQQ 当前价值</label><input id="qv" type="number" inputmode="decimal"></div><div><label>TQQQ 当前价值</label><input id="tv" type="number" inputmode="decimal"></div></div><button id="snapshot" class="primary">保存当前价值快照</button><div class="hint">保存快照后用于收益曲线、XIRR 和简单复合年化。</div></section>
 <section class="card"><h2 class="title">📸 历史价值快照</h2><div id="snapshots" class="table"></div></section><section class="card"><h2 class="title">收益分析</h2><div id="analysisHint" class="hint"></div><div class="statgrid"><div class="stat"><div class="k">QQQ 累计收益</div><div id="qp" class="v">—</div></div><div class="stat"><div class="k">QQQ 累计收益率</div><div id="qrtn" class="v">—</div></div><div class="stat"><div class="k">QQQ XIRR 年化</div><div id="qx" class="v">—</div></div><div class="stat"><div class="k">QQQ 简单复合年化</div><div id="qcagr" class="v">—</div></div><div class="stat"><div class="k">TQQQ 累计收益</div><div id="tp" class="v">—</div></div><div class="stat"><div class="k">TQQQ 累计收益率</div><div id="trtn" class="v">—</div></div><div class="stat"><div class="k">TQQQ XIRR 年化</div><div id="tx" class="v">—</div></div><div class="stat"><div class="k">TQQQ 简单复合年化</div><div id="tcagr" class="v">—</div></div></div></section>
 <section class="card"><h2 class="title">📈 收益曲线</h2><div class="actions"><button id="cq" class="secondary" style="color:var(--primary)">QQQ</button><button id="ct" class="secondary">TQQQ</button></div><canvas id="chart"></canvas><div class="legend"><span><i class="dot"></i>资产价值</span>　<span><i class="dot dot2"></i>累计投入</span></div></section>
 </div>
@@ -340,4 +354,52 @@ function switchTab(name){document.querySelectorAll('.tab-page').forEach(x=>x.cla
 document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 load();calc();snapshots();syncProgress(95,'正在刷新页面数据…');driveSetStatus('已从 Google Drive 恢复 · '+new Date().toLocaleString(),'ok');syncProgress(100,'恢复完成');toast('云端数据已恢复 ✓');setTimeout(()=>syncProgress(0,'',false),1200)}catch(e){driveSetStatus('同步失败：'+(e.message||e),'error');syncProgress(0,'',false);alert('Google Drive 下载失败：'+(e.message||e))}finally{driveBusy=false}}
 $('driveConnect').onclick=driveConnect;$('driveUpload').onclick=driveUpload;$('driveDownload').onclick=driveDownload;
-</script><script>if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{const r=await navigator.serviceWorker.register('./sw.js');if(r.update)await r.update()}catch(e){console.warn('SW registration failed',e)}})}</script></body></html>
+</script><script>if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{const r=await navigator.serviceWorker.register('./sw.js');if(r.update)await r.update()}catch(e){console.warn('SW registration failed',e)}})}</script>
+<script>
+(function(){
+function N(x){x=Number(x);return Number.isFinite(x)?x:0}
+function money(x,a){return (a==='tqqq'?'$':'¥')+Number(x).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function percent(x){return Number.isFinite(x)?(x*100).toFixed(2)+'%':'—'}
+window.updateStrategyComparison=function(){
+ const R=(window.S&&Array.isArray(S.records))?S.records:[];
+ const A=['qqq','tqqq'];
+ let best=null;
+ for(const asset of A){
+  const r=R.filter(x=>x.asset===asset&&N(x.amount)>0&&N(x.price)>0).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  if(!r.length) continue;
+  let base=N(asset==='qqq'?(S.settings?.qqqBase||S.qqqBase):(S.settings?.tqqqBase||S.tqqqBase));
+  if(!(base>0)) base=Math.min(...r.map(x=>N(x.amount)).filter(Boolean));
+  const smartInvested=r.reduce((z,x)=>z+N(x.amount),0);
+  const smartShares=r.reduce((z,x)=>z+N(x.amount)/N(x.price),0);
+  const regularInvested=base*r.length;
+  const regularShares=r.reduce((z,x)=>z+base/N(x.price),0);
+  let current=0;
+  const snaps=Array.isArray(S.snapshots)?S.snapshots.filter(x=>x.asset===asset&&N(x.value)>0).sort((a,b)=>String(a.date).localeCompare(String(b.date))):[];
+  if(snaps.length) current=N(snaps.at(-1).value)/smartShares;
+  if(!(current>0)) current=N(r.at(-1).price);
+  const smartValue=smartShares*current, regularValue=regularShares*current;
+  best={asset,smartInvested,regularInvested,smartValue,regularValue,
+    smartReturn:smartValue/smartInvested-1,regularReturn:regularValue/regularInvested-1,
+    excess:smartValue-regularValue,excessPct:smartValue/regularValue-1};
+  break;
+ }
+ const $=id=>document.getElementById(id);
+ if(!best){
+  ['cmpSmartInvested','cmpRegularInvested','cmpSmartValue','cmpRegularValue','cmpSmartReturn','cmpRegularReturn','cmpExcess'].forEach(id=>$(id)&&($(id).textContent='—'));
+  if($('cmpExcessHint'))$('cmpExcessHint').textContent='请在定投记录中填写定投时价格。';
+  return;
+ }
+ $('cmpSmartInvested').textContent=money(best.smartInvested,best.asset);
+ $('cmpRegularInvested').textContent=money(best.regularInvested,best.asset);
+ $('cmpSmartValue').textContent=money(best.smartValue,best.asset);
+ $('cmpRegularValue').textContent=money(best.regularValue,best.asset);
+ $('cmpSmartReturn').textContent=percent(best.smartReturn);
+ $('cmpRegularReturn').textContent=percent(best.regularReturn);
+ $('cmpExcess').textContent=money(best.excess,best.asset);
+ $('cmpExcess').className='v '+(best.excess>0?'pos':best.excess<0?'neg':'');
+ $('cmpExcessHint').textContent='相对普通定投 '+percent(best.excessPct)+'；普通定投按每个实际定投月份固定投入基准金额模拟。';
+};
+window.addEventListener('load',()=>setTimeout(updateStrategyComparison,300));
+})();
+</script>
+</body></html>
