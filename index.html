@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>财富自由 V2.4 · PWA 2.4</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"><title>财富自由 V2.4 · PWA 2.4</title><style>
 :root{
   --bg:#f3f6fa;
   --surface:#ffffff;
@@ -327,7 +327,13 @@ body{padding-bottom:0!important}
 }
 .app{padding-bottom:96px!important}
 </style>
-</head><body><main class="app">
+<style id="no-page-zoom">
+html,body{touch-action:pan-x pan-y;-ms-touch-action:pan-x pan-y}
+input,select,textarea{touch-action:manipulation}
+</style><style id="investment-feedback">
+.tap-feedback{transform:scale(.97)!important;opacity:.78!important;transition:transform .06s ease,opacity .06s ease!important}
+.success-feedback{transform:scale(.98)!important;opacity:.88!important}
+</style></head><body><main class="app">
 <header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V2.4 · PWA 2.4</div></div></header>
 <div id="tab-home" class="tab-page active"><div class="hint" style="margin:0 3px 10px">输入今天的 PE，立即查看本月建议</div><section class="card"><h2 class="title">本月智能定投</h2><label>纳斯达克 5年 PE</label><input id="pe" type="number" inputmode="decimal" step=".01" placeholder="例如 38.5"><div style="height:11px"></div><label>TQQQ · MA200</label><div class="ma"><button id="above" class="active">高于 MA200</button><button id="below">低于 MA200</button></div></section>
 <section class="card result"><div class="head"><div class="asset">🇨🇳 国内 QQQ</div><div id="qb" class="badge">等待 PE</div></div><div id="qs" class="state">输入 PE 后自动计算</div><div id="qa" class="amount">—</div><div id="qr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="qprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rq" class="primary">记录本次定投</button></section>
@@ -415,36 +421,6 @@ body{padding-bottom:0!important}
 <button class="tab-btn" data-tab="settings"><span>⚙️</span><small>设置</small></button>
 </nav>
 <script>
-
-(function(){
-  var originalSwitch=window.switchTab;
-  window.switchTab=function(name){
-    document.querySelectorAll('.tab-page').forEach(function(x){x.classList.remove('active')});
-    var page=document.getElementById('tab-'+name);
-    if(page) page.classList.add('active');
-    document.querySelectorAll('.bottom-nav .tab-btn').forEach(function(x){
-      x.classList.toggle('active',x.dataset.tab===name);
-    });
-    window.scrollTo(0,0);
-    if(name==='assets'){
-      setTimeout(function(){
-        if(typeof window.draw==='function') window.draw();
-        if(typeof window.updateStrategyComparison==='function') window.updateStrategyComparison();
-      },30);
-    }
-    if(typeof originalSwitch==='function' && originalSwitch!==window.switchTab){
-      try{ originalSwitch(name); }catch(e){}
-    }
-  };
-  document.addEventListener('DOMContentLoaded',function(){
-    document.querySelectorAll('.bottom-nav .tab-btn').forEach(function(btn){
-      btn.addEventListener('click',function(e){
-        e.preventDefault();
-        window.switchTab(btn.dataset.tab);
-      });
-    });
-  });
-})();
 const APP_VERSION='V2.4';
 function calcInputMoney(v){return '$'+Number(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function calcInputPercent(v){return Number.isFinite(v)?(v*100).toFixed(2)+'%':'—'}
@@ -783,6 +759,28 @@ window.updateStrategyComparison=function(){
 window.addEventListener('load',()=>setTimeout(updateStrategyComparison,300));
 })();
 
+(function(){
+function installInvestmentFeedback(){
+ document.querySelectorAll('button').forEach(function(btn){
+  if(btn.dataset.feedbackBound==='1')return;
+  if(!(btn.textContent||'').trim().includes('记录本次定投'))return;
+  btn.dataset.feedbackBound='1';
+  btn.addEventListener('pointerdown',function(){btn.classList.add('tap-feedback')},{passive:true});
+  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+   btn.addEventListener(ev,function(){setTimeout(function(){btn.classList.remove('tap-feedback')},120)},{passive:true});
+  });
+  btn.addEventListener('click',function(){
+   var original=btn.dataset.originalText||btn.textContent;
+   btn.dataset.originalText=original;
+   btn.classList.add('success-feedback');
+   btn.textContent='✓ 已记录';
+   setTimeout(function(){btn.textContent=original;btn.classList.remove('success-feedback')},900);
+  });
+ });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installInvestmentFeedback);
+else installInvestmentFeedback();
+})();
 </script>
 </body>
 </html>
