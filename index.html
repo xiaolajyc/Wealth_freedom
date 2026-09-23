@@ -262,14 +262,14 @@ canvas{width:100%;height:220px;display:block}
   .record{grid-template-columns:1fr 78px 88px}
 }
 </style><meta name="theme-color" content="#3563f5"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="财富自由"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"></head><body><main class="app">
-<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V1.5</div></div></header>
+<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V1.6</div></div></header>
 <div id="tab-home" class="tab-page active"><div class="hint" style="margin:0 3px 10px">输入今天的 PE，立即查看本月建议</div><section class="card"><h2 class="title">本月智能定投</h2><label>纳斯达克 5年 PE</label><input id="pe" type="number" inputmode="decimal" step=".01" placeholder="例如 38.5"><div style="height:11px"></div><label>TQQQ · MA200</label><div class="ma"><button id="above" class="active">高于 MA200</button><button id="below">低于 MA200</button></div></section>
-<section class="card result"><div class="head"><div class="asset">🇨🇳 国内 QQQ</div><div id="qb" class="badge">等待 PE</div></div><div id="qs" class="state">输入 PE 后自动计算</div><div id="qa" class="amount">—</div><div id="qr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">用于策略对比</span></label><input id="qprice" type="number" inputmode="decimal" min="0" step="any" placeholder="输入本次买入时的 QQQ 价格"></div><button id="rq" class="primary">记录本次定投</button></section>
-<section class="card result"><div class="head"><div class="asset">🇺🇸 国外 TQQQ</div><div id="tb" class="badge">等待输入</div></div><div id="ts" class="state">PE + MA200 自动计算</div><div id="ta" class="amount">—</div><div id="tr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">用于策略对比</span></label><input id="tprice" type="number" inputmode="decimal" min="0" step="any" placeholder="输入本次买入时的 TQQQ 价格"></div><button id="rt" class="primary">记录本次定投</button></section>
+<section class="card result"><div class="head"><div class="asset">🇨🇳 国内 QQQ</div><div id="qb" class="badge">等待 PE</div></div><div id="qs" class="state">输入 PE 后自动计算</div><div id="qa" class="amount">—</div><div id="qr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="qprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rq" class="primary">记录本次定投</button></section>
+<section class="card result"><div class="head"><div class="asset">🇺🇸 国外 TQQQ</div><div id="tb" class="badge">等待输入</div></div><div id="ts" class="state">PE + MA200 自动计算</div><div id="ta" class="amount">—</div><div id="tr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="tprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rt" class="primary">记录本次定投</button></section>
 </div>
 <div id="tab-records" class="tab-page"><section class="card"><h2 class="title">投资概览</h2><div class="statgrid"><div class="stat"><div class="k">QQQ 累计投入</div><div id="qt" class="v">¥0</div></div><div class="stat"><div class="k">TQQQ 累计投入</div><div id="tt" class="v">$0</div></div></div></section>
 <section class="card"><h2 class="title">📒 定投记录 <span id="count" class="tiny">0笔</span></h2><div id="records" class="table"></div></section>
-<section class="card"><h2 class="title">添加过去的定投记录</h2><div class="record"><div><label>日期</label><input id="rd" type="date"></div><div><label>标的</label><select id="ra"><option value="qqq">QQQ</option><option value="tqqq">TQQQ</option></select></div><div><label>金额</label><input id="ram" type="number" inputmode="decimal"></div><div style="margin-top:8px"><label>定投时价格 <span class="tiny">用于策略对比</span></label><input id="rap" type="number" inputmode="decimal" min="0" step="any" placeholder="例如 100"></div></div><button id="add" class="primary">添加记录</button></section>
+<section class="card"><h2 class="title">添加过去的定投记录</h2><div class="record"><div><label>日期</label><input id="rd" type="date"></div><div><label>标的</label><select id="ra"><option value="qqq">QQQ</option><option value="tqqq">TQQQ</option></select></div><div><label>金额</label><input id="ram" type="number" inputmode="decimal"></div><div style="margin-top:8px"><label>定投时价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="rap" type="number" inputmode="decimal" min="0" step="any" placeholder="例如 100"></div></div><button id="add" class="primary">添加记录</button><button id="cancelRecordEdit" class="secondary" onclick="cancelRecordEdit()" style="display:none">取消</button></section>
 </main></div>
 <div id="tab-assets" class="tab-page"><section class="card">
 <h2 class="title">策略对比</h2>
@@ -298,7 +298,7 @@ canvas{width:100%;height:220px;display:block}
 <button class="tab-btn" data-tab="settings"><span>⚙️</span><small>设置</small></button>
 </nav>
 </main>
-<script>
+<script>const APP_VERSION='V1.6';</script><script>
 const K='wealthFreedomTrackerV3',D={qqq:2000,tqqq:500,ma:'above',records:[],snapshots:[]};let S=JSON.parse(localStorage.getItem(K)||'null')||D,chart='qqq';
 const $=id=>document.getElementById(id),today=()=>new Date().toISOString().slice(0,10),fmt=(n,c)=>(c==='CNY'?'¥':'$')+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
 function save(){localStorage.setItem(K,JSON.stringify(S))}
@@ -318,15 +318,41 @@ function suggest(a){
  let r=a==='qqq'?qrule(+$('pe').value):trule(+$('pe').value);
  if(!r||r[2]<=0)return;
  let field=a==='qqq'?'qprice':'tprice',p=+$(field).value;
- if(!(p>0)){toast('请先输入本次定投价格');$(field).focus();return}
- addRaw(today(),a,r[2]*(a==='qqq'?S.qqq:S.tqqq),p);
+ addRaw(today(),a,r[2]*(a==='qqq'?S.qqq:S.tqqq),p>0?p:null);
 }
 $('rq').onclick=()=>suggest('qqq');$('rt').onclick=()=>suggest('tqqq');
 $('above').onclick=()=>{S.ma='above';save();load();calc()};$('below').onclick=()=>{S.ma='below';save();load();calc()};
 $('pe').oninput=calc;
 $('savebase').onclick=()=>{let a=+$('qbv').value,b=+$('tbv').value;if(a>0&&b>0){S.qqq=a;S.tqqq=b;save();calc()}};
 $('snapshot').onclick=()=>{let d=today(),ok=0;if($('qv').value!==''){S.snapshots.push({id:Date.now()+Math.random(),date:d,asset:'qqq',value:+$('qv').value});ok++}if($('tv').value!==''){S.snapshots.push({id:Date.now()+Math.random()+1,date:d,asset:'tqqq',value:+$('tv').value});ok++}if(ok){save();calc();snapshots();toast('当前价值快照已保存 ✓')}};
-$('add').onclick=()=>{let d=$('rd').value||today(),a=$('ra').value,v=+$('ram').value,p=+$('rap').value;if(v>0){addRaw(d,a,v,p);$('ram').value='';$('rap').value=''}};
+
+function editRecord(id){
+ const x=S.records.find(r=>String(r.id)===String(id)); if(!x)return;
+ $('rd').value=x.date||today();
+ $('ra').value=x.asset||'qqq';
+ $('ram').value=x.amount??'';
+ $('rap').value=(x.price>0?x.price:'');
+ const b=$('add'); if(b){b.textContent='保存修改';b.dataset.editId=String(id);}$('cancelRecordEdit').style.display='inline-flex';
+ document.querySelector('#tab-records')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function cancelRecordEdit(){
+ const b=$('add'); if(b){delete b.dataset.editId;b.textContent='添加记录';}$('cancelRecordEdit').style.display='none';
+}
+$('add').onclick=()=>{
+ let d=$('rd').value||today(),a=$('ra').value,v=+$('ram').value,p=+$('rap').value,b=$('add');
+ if(!(v>0))return;
+ const price=p>0?p:null, editId=b?.dataset.editId;
+ if(editId){
+   const x=S.records.find(r=>String(r.id)===String(editId));
+   if(x){x.date=d;x.asset=a;x.amount=v;x.price=price;}
+   if(b){delete b.dataset.editId;b.textContent='添加记录';}
+ }else{
+   addRaw(d,a,v,price);
+ }
+ $('ram').value='';$('rap').value='';
+ save();records();stats();draw();
+ if(window.updateStrategyComparison)updateStrategyComparison();
+};
 function records(){let r=[...S.records].sort((a,b)=>b.date.localeCompare(a.date));$('count').textContent=r.length+'笔';$('records').innerHTML=r.length?'<table><tr><th>日期</th><th>标的</th><th>金额</th><th>价格</th><th></th></tr>'+r.map(x=>`<tr><td>${x.date}</td><td>${x.asset==='qqq'?'🇨🇳 QQQ':'🇺🇸 TQQQ'}</td><td>${fmt(x.amount,x.asset==='qqq'?'CNY':'USD')}</td><td>${x.price>0?x.price:'—'}</td><td><button onclick="del('${x.id}')">删除</button></td></tr>`).join('')+'</table>':'<div class="empty">还没有定投记录</div>'}
 function del(id){S.records=S.records.filter(x=>String(x.id)!==String(id));save();calc()}
 function snapshots(){let r=[...S.snapshots].sort((a,b)=>b.date.localeCompare(a.date));$('snapshots').innerHTML=r.length?'<table><tr><th>日期</th><th>标的</th><th>当前价值</th><th>操作</th></tr>'+r.map(x=>`<tr><td>${x.date}</td><td>${x.asset==='qqq'?'🇨🇳 QQQ':'🇺🇸 TQQQ'}</td><td>${fmt(x.value,x.asset==='qqq'?'CNY':'USD')}</td><td><button onclick="editSnapshot('${x.id}')">编辑</button> <button onclick="deleteSnapshot('${x.id}')">删除</button></td></tr>`).join('')+'</table>':'<div class="empty">还没有价值快照</div>'}
