@@ -262,7 +262,7 @@ canvas{width:100%;height:220px;display:block}
   .record{grid-template-columns:1fr 78px 88px}
 }
 </style><meta name="theme-color" content="#3563f5"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="财富自由"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"></head><body><main class="app">
-<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V1.6</div></div></header>
+<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V1.7</div></div></header>
 <div id="tab-home" class="tab-page active"><div class="hint" style="margin:0 3px 10px">输入今天的 PE，立即查看本月建议</div><section class="card"><h2 class="title">本月智能定投</h2><label>纳斯达克 5年 PE</label><input id="pe" type="number" inputmode="decimal" step=".01" placeholder="例如 38.5"><div style="height:11px"></div><label>TQQQ · MA200</label><div class="ma"><button id="above" class="active">高于 MA200</button><button id="below">低于 MA200</button></div></section>
 <section class="card result"><div class="head"><div class="asset">🇨🇳 国内 QQQ</div><div id="qb" class="badge">等待 PE</div></div><div id="qs" class="state">输入 PE 后自动计算</div><div id="qa" class="amount">—</div><div id="qr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="qprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rq" class="primary">记录本次定投</button></section>
 <section class="card result"><div class="head"><div class="asset">🇺🇸 国外 TQQQ</div><div id="tb" class="badge">等待输入</div></div><div id="ts" class="state">PE + MA200 自动计算</div><div id="ta" class="amount">—</div><div id="tr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="tprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rt" class="primary">记录本次定投</button></section>
@@ -298,7 +298,7 @@ canvas{width:100%;height:220px;display:block}
 <button class="tab-btn" data-tab="settings"><span>⚙️</span><small>设置</small></button>
 </nav>
 </main>
-<script>const APP_VERSION='V1.6';</script><script>
+<script>const APP_VERSION='V1.7';</script><script>
 const K='wealthFreedomTrackerV3',D={qqq:2000,tqqq:500,ma:'above',records:[],snapshots:[]};let S=JSON.parse(localStorage.getItem(K)||'null')||D,chart='qqq';
 const $=id=>document.getElementById(id),today=()=>new Date().toISOString().slice(0,10),fmt=(n,c)=>(c==='CNY'?'¥':'$')+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
 function save(){localStorage.setItem(K,JSON.stringify(S))}
@@ -339,21 +339,96 @@ function cancelRecordEdit(){
  const b=$('add'); if(b){delete b.dataset.editId;b.textContent='添加记录';}$('cancelRecordEdit').style.display='none';
 }
 $('add').onclick=()=>{
- let d=$('rd').value||today(),a=$('ra').value,v=+$('ram').value,p=+$('rap').value,b=$('add');
- if(!(v>0))return;
- const price=p>0?p:null, editId=b?.dataset.editId;
+ const d=$('rd').value||today();
+ const a=$('ra').value;
+ const v=+$('ram').value;
+ const p=+$('rap').value;
+ if(!(v>0)){toast('请输入定投金额');return;}
+ const price=p>0?p:null;
+ const b=$('add');
+ const editId=b?.dataset.editId;
  if(editId){
-   const x=S.records.find(r=>String(r.id)===String(editId));
+   const x=(S.records||[]).find(r=>String(r.id)===String(editId));
    if(x){x.date=d;x.asset=a;x.amount=v;x.price=price;}
-   if(b){delete b.dataset.editId;b.textContent='添加记录';}
+   delete b.dataset.editId;
+   b.textContent='添加记录';
+   const c=$('cancelRecordEdit'); if(c)c.style.display='none';
+   toast('定投记录已更新');
  }else{
    addRaw(d,a,v,price);
+   toast('定投记录已添加');
  }
- $('ram').value='';$('rap').value='';
+ $('ram').value='';
+ $('rap').value='';
  save();records();stats();draw();
  if(window.updateStrategyComparison)updateStrategyComparison();
 };
-function records(){let r=[...S.records].sort((a,b)=>b.date.localeCompare(a.date));$('count').textContent=r.length+'笔';$('records').innerHTML=r.length?'<table><tr><th>日期</th><th>标的</th><th>金额</th><th>价格</th><th></th></tr>'+r.map(x=>`<tr><td>${x.date}</td><td>${x.asset==='qqq'?'🇨🇳 QQQ':'🇺🇸 TQQQ'}</td><td>${fmt(x.amount,x.asset==='qqq'?'CNY':'USD')}</td><td>${x.price>0?x.price:'—'}</td><td><button onclick="del('${x.id}')">删除</button></td></tr>`).join('')+'</table>':'<div class="empty">还没有定投记录</div>'}
+function records(){
+ const el=$('records'); if(!el)return;
+ const r=(S.records||[]).slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+ if(!r.length){
+   el.innerHTML='<div class="empty">暂无定投记录</div>';
+   return;
+ }
+ el.innerHTML='<div class="table-wrap"><table><thead><tr><th>日期</th><th>标的</th><th>金额</th><th>价格</th><th>操作</th></tr></thead><tbody>'+
+ r.map(x=>{
+   const asset=x.asset==='qqq'?'qqq':'tqqq';
+   const name=asset==='qqq'?'🇨🇳 QQQ':'🇺🇸 TQQQ';
+   const cur=asset==='qqq'?'CNY':'USD';
+   const price=(x.price!==null&&x.price!==undefined&&Number(x.price)>0)?String(x.price):'—';
+   return `<tr>
+     <td>${x.date||''}</td>
+     <td>${name}</td>
+     <td>${fmt(Number(x.amount)||0,cur)}</td>
+     <td>${price}</td>
+     <td class="actions">
+       <button type="button" class="secondary" onclick="editRecord('${String(x.id).replace(/'/g,"\\'")}')">编辑</button>
+       <button type="button" class="secondary danger" onclick="deleteRecord('${String(x.id).replace(/'/g,"\\'")}')">删除</button>
+     </td>
+   </tr>`;
+ }).join('')+
+ '</tbody></table></div>';
+}
+
+function deleteRecord(id){
+ const i=(S.records||[]).findIndex(x=>String(x.id)===String(id));
+ if(i<0)return;
+ if(!confirm('确定删除这笔定投记录吗？'))return;
+ S.records.splice(i,1);
+ save(); records(); stats(); draw();
+ if(window.updateStrategyComparison)updateStrategyComparison();
+}
+
+function editRecord(id){
+ const x=(S.records||[]).find(r=>String(r.id)===String(id));
+ if(!x)return;
+ $('rd').value=x.date||today();
+ $('ra').value=x.asset||'qqq';
+ $('ram').value=x.amount??'';
+ $('rap').value=(x.price!==null&&x.price!==undefined&&Number(x.price)>0)?x.price:'';
+ const b=$('add');
+ if(b){
+   b.textContent='保存修改';
+   b.dataset.editId=String(id);
+ }
+ const c=$('cancelRecordEdit');
+ if(c)c.style.display='inline-flex';
+ const form=document.getElementById('rd')?.closest('.card');
+ if(form)form.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function cancelRecordEdit(){
+ const b=$('add');
+ if(b){
+   delete b.dataset.editId;
+   b.textContent='添加记录';
+ }
+ const c=$('cancelRecordEdit');
+ if(c)c.style.display='none';
+ $('ram').value='';
+ $('rap').value='';
+}
+
 function del(id){S.records=S.records.filter(x=>String(x.id)!==String(id));save();calc()}
 function snapshots(){let r=[...S.snapshots].sort((a,b)=>b.date.localeCompare(a.date));$('snapshots').innerHTML=r.length?'<table><tr><th>日期</th><th>标的</th><th>当前价值</th><th>操作</th></tr>'+r.map(x=>`<tr><td>${x.date}</td><td>${x.asset==='qqq'?'🇨🇳 QQQ':'🇺🇸 TQQQ'}</td><td>${fmt(x.value,x.asset==='qqq'?'CNY':'USD')}</td><td><button onclick="editSnapshot('${x.id}')">编辑</button> <button onclick="deleteSnapshot('${x.id}')">删除</button></td></tr>`).join('')+'</table>':'<div class="empty">还没有价值快照</div>'}
 function editSnapshot(id){let x=S.snapshots.find(z=>String(z.id)===String(id));if(!x)return;let d=prompt('修改日期（YYYY-MM-DD）',x.date);if(d===null)return;let v=prompt('修改当前价值',x.value);if(v===null)return;v=+v;if(!d||!(v>=0))return toast('输入无效');x.date=d;x.value=v;save();calc();snapshots();toast('价值快照已修改 ✓')}
