@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"><title>财富自由 V2.8 · PWA 2.8</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"><title>财富自由 V2.9 · PWA 2.9</title><style>
 :root{
   --bg:#f3f6fa;
   --surface:#ffffff;
@@ -334,19 +334,8 @@ input,select,textarea{touch-action:manipulation}
 .tap-feedback{transform:scale(.97)!important;opacity:.78!important;transition:transform .06s ease,opacity .06s ease!important}
 .success-feedback{transform:scale(.98)!important;opacity:.88!important}
 </style></head><body><main class="app">
-<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V2.8 · PWA 2.8</div></div></header>
-<div id="tab-home" class="tab-page active">
-<div id="aud-overview-line" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 3px 10px;padding:10px 12px;border-radius:12px;background:var(--card,#fff);border:1px solid rgba(0,0,0,.06)">
-  <span style="font-size:13px;font-weight:600">TQQQ 折合澳元</span>
-  <strong id="aud-total-value" style="font-size:17px">A$0</strong>
-</div>
-
-<div id="aud-total-value" style="font-size:28px;font-weight:800;line-height:1.2;margin:6px 0">A$0</div>
-  <div style="font-size:12px;color:#7b8494">
-    TQQQ 按设置中的 USD/AUD 汇率换算
-  </div>
-</div>
-<div class="hint" style="margin:0 3px 10px">输入今天的 PE，立即查看本月建议</div><section class="card"><h2 class="title">本月智能定投</h2><label>纳斯达克 5年 PE</label><input id="pe" type="number" inputmode="decimal" step=".01" placeholder="例如 38.5"><div style="height:11px"></div><label>TQQQ · MA200</label><div class="ma"><button id="above" class="active">高于 MA200</button><button id="below">低于 MA200</button></div></section>
+<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V2.9 · PWA 2.9</div></div></header>
+<div id="tab-home" class="tab-page active"><div class="hint" style="margin:0 3px 10px">输入今天的 PE，立即查看本月建议</div><section class="card"><h2 class="title">本月智能定投</h2><label>纳斯达克 5年 PE</label><input id="pe" type="number" inputmode="decimal" step=".01" placeholder="例如 38.5"><div style="height:11px"></div><label>TQQQ · MA200</label><div class="ma"><button id="above" class="active">高于 MA200</button><button id="below">低于 MA200</button></div></section>
 <section class="card result"><div class="head"><div class="asset">🇨🇳 国内 QQQ</div><div id="qb" class="badge">等待 PE</div></div><div id="qs" class="state">输入 PE 后自动计算</div><div id="qa" class="amount">—</div><div id="qr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="qprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rq" class="primary">记录本次定投</button></section>
 <section class="card result"><div class="head"><div class="asset">🇺🇸 国外 TQQQ</div><div id="tb" class="badge">等待输入</div></div><div id="ts" class="state">PE + MA200 自动计算</div><div id="ta" class="amount">—</div><div id="tr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="tprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rt" class="primary">记录本次定投</button></section>
 </div>
@@ -400,33 +389,7 @@ input,select,textarea{touch-action:manipulation}
 <section class="card"><h2 class="title">📈 收益曲线</h2><div class="actions"><button id="cq" class="secondary" style="color:var(--primary)">QQQ</button><button id="ct" class="secondary">TQQQ</button></div><canvas id="chart"></canvas><div class="legend"><span><i class="dot"></i>资产价值</span>　<span><i class="dot dot2"></i>累计投入</span></div></section>
 </div>
 </div>
-<div id="tab-settings" class="tab-page">
-<div id="aud-rate-row-v28" class="card" style="margin-bottom:12px">
-  <div class="card-title">USD / AUD 汇率</div>
-  <div style="display:flex;align-items:center;gap:8px">
-    <span>1 USD =</span>
-    <input id="usd-aud-rate-v28" type="number" inputmode="decimal" step="0.0001" min="0.0001" value="1.4200" style="flex:1;min-width:0">
-    <span>AUD</span>
-  </div>
-  <button id="save-usd-aud-rate-v28" type="button" class="btn" style="width:100%;margin-top:8px">保存汇率</button>
-  <div id="usd-aud-rate-status-v28" style="font-size:12px;color:#7b8494;margin-top:6px"></div>
-</div>
-
-<div class="card" id="aud-rate-card-v26">
-  <div class="card-title">USD / AUD 汇率</div>
-  <div style="font-size:13px;color:#7b8494;margin:6px 0 10px">
-    用于计算 TQQQ 折合澳元的资产价值
-  </div>
-  <div style="display:flex;gap:8px;align-items:center">
-    <span>1 USD =</span>
-    <input id="usd-aud-rate-v26" type="number" inputmode="decimal" step="0.0001" min="0.0001"
-      style="flex:1;min-width:0" value="1.4200">
-    <span>AUD</span>
-  </div>
-  <button id="save-usd-aud-rate-v26" class="btn" style="width:100%;margin-top:10px">保存汇率</button>
-  <div id="usd-aud-rate-status-v26" style="font-size:12px;color:#7b8494;margin-top:7px"></div>
-</div>
-<section class="card"><h2 class="title">☁️ Google Drive 多设备同步</h2><div id="driveStatus" class="drive-status">未连接</div><div class="drive-actions"><button id="driveConnect" class="primary">连接 Google Drive</button><button id="driveUpload" class="secondary">上传到云端</button><button id="driveDownload" class="secondary">从云端恢复</button></div><div id="syncProgress" class="sync-progress"><div class="sync-progress-track"><div id="syncBar" class="sync-progress-bar"></div></div><div class="sync-progress-text"><span id="syncText">准备同步…</span><span id="syncPct">0%</span></div></div><div class="drive-note">同步本应用的基准金额、定投记录、历史价值快照和当前设置。数据同时保存在本机。首次连接会弹出 Google 授权窗口。</div></section><section class="card"><h2 class="title">设置</h2><div class="grid2"><div><label>版本</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:14px;font-weight:700">V2.8 · PWA 2.8</div></div><div><label>数据存储</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:12px;color:#596477">本机 + Google Drive</div></div></div><div class="hint">V2.8 · PWA 2.8：增加 Google Drive 多设备同步；支持上传、恢复、连接状态与同步进度。</div></section><section class="card"><h2 class="title">基准金额</h2><div class="grid2"><div><label>🇨🇳 QQQ · 1份</label><input id="qbv" type="number" inputmode="decimal"></div><div><label>🇺🇸 TQQQ · 1份</label><input id="tbv" type="number" inputmode="decimal"></div></div><button id="savebase" class="primary">保存基准金额</button></section>
+<div id="tab-settings" class="tab-page"><section class="card"><h2 class="title">☁️ Google Drive 多设备同步</h2><div id="driveStatus" class="drive-status">未连接</div><div class="drive-actions"><button id="driveConnect" class="primary">连接 Google Drive</button><button id="driveUpload" class="secondary">上传到云端</button><button id="driveDownload" class="secondary">从云端恢复</button></div><div id="syncProgress" class="sync-progress"><div class="sync-progress-track"><div id="syncBar" class="sync-progress-bar"></div></div><div class="sync-progress-text"><span id="syncText">准备同步…</span><span id="syncPct">0%</span></div></div><div class="drive-note">同步本应用的基准金额、定投记录、历史价值快照和当前设置。数据同时保存在本机。首次连接会弹出 Google 授权窗口。</div></section><section class="card"><h2 class="title">设置</h2><div class="grid2"><div><label>版本</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:14px;font-weight:700">V2.9 · PWA 2.9</div></div><div><label>数据存储</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:12px;color:#596477">本机 + Google Drive</div></div></div><div class="hint">V2.9 · PWA 2.9：增加 Google Drive 多设备同步；支持上传、恢复、连接状态与同步进度。</div></section><section class="card"><h2 class="title">基准金额</h2><div class="grid2"><div><label>🇨🇳 QQQ · 1份</label><input id="qbv" type="number" inputmode="decimal"></div><div><label>🇺🇸 TQQQ · 1份</label><input id="tbv" type="number" inputmode="decimal"></div></div><button id="savebase" class="primary">保存基准金额</button></section>
 <section class="card">
 <h2 class="title">🧮 定投年化换算计算器</h2>
 <div class="hint" style="margin-bottom:14px">用于估算定期定额投资中「复合年化」与 XIRR 年化的对应关系。</div>
@@ -459,7 +422,7 @@ input,select,textarea{touch-action:manipulation}
 </nav>
 <script>
 
-const APP_VERSION='V2.8';
+const APP_VERSION='V2.9';
 function calcInputMoney(v){return '$'+Number(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function calcInputPercent(v){return Number.isFinite(v)?(v*100).toFixed(2)+'%':'—'}
 function calcDcaFV(monthly,years,annual){
@@ -655,7 +618,7 @@ function switchTab(name){
 document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 load();calc();snapshots();
 
-/* V2.8 · PWA 2.8 Google Drive sync — modeled on TodoCalendar's working Drive flow. */
+/* V2.9 · PWA 2.9 Google Drive sync — modeled on TodoCalendar's working Drive flow. */
 const DRIVE_CLIENT_ID='801960562511-1vkajpfcfd1m1ri4rlt9t1icbd0jdsge.apps.googleusercontent.com';
 const DRIVE_SCOPE='https://www.googleapis.com/auth/drive.file';
 const DRIVE_FILE_NAME='wealth-freedom-investment-sync-v1.json';
@@ -823,87 +786,66 @@ else installInvestmentFeedback();
 })();
 </script>
 
-<script id="aud-v26-js">
+<script id="aud-v29">
 (function(){
-  const RATE_KEY='wealth_aud_usd_rate';
+  var KEY='wealth_aud_usd_rate';
   function rate(){
-    const v=parseFloat(localStorage.getItem(RATE_KEY));
-    return Number.isFinite(v)&&v>0?v:1.42;
+    var n=parseFloat(localStorage.getItem(KEY));
+    return isFinite(n)&&n>0?n:1.42;
   }
-  function money(v){
-    return new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}).format(v||0);
+  function money(n){
+    return new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}).format(n||0);
   }
-  function getTqqqValue(){
-    // Search common global/data fields first.
-    const names=['tqqqCurrentValue','currentTqqqValue','tqqqValue','tqqqCurrent','currentValueTQQQ'];
-    for(const n of names){
-      if(Number.isFinite(Number(window[n]))) return Number(window[n]);
+  function currentTqqq(){
+    var names=['tqqqCurrentValue','currentTqqqValue','tqqqValue','currentValueTQQQ','tqqqMarketValue'];
+    for(var i=0;i<names.length;i++){
+      var n=Number(window[names[i]]);
+      if(isFinite(n)&&n>0)return n;
     }
-    // Then inspect the existing home overview text for a US$ value near TQQQ.
-    const home=document.getElementById('tab-home');
-    if(!home) return 0;
-    const text=home.innerText||'';
-    const i=text.toUpperCase().indexOf('TQQQ');
-    if(i<0) return 0;
-    const part=text.slice(i,i+1200);
-    const matches=[...part.matchAll(/(?:US\\$|USD\\s*)\\s*([0-9,]+(?:\\.\\d+)?)/gi)];
-    if(matches.length) return parseFloat(matches[matches.length-1][1].replace(/,/g,''));
     return 0;
   }
-  function refresh(){
-    const total=document.getElementById('aud-total-value');
-    if(total) total.textContent=money(getTqqqValue()*rate());
-    const input=document.getElementById('usd-aud-rate-v26');
-    if(input && document.activeElement!==input) input.value=rate().toFixed(4);
-  }
-  function bind(){
-    const input=document.getElementById('usd-aud-rate-v26');
-    const btn=document.getElementById('save-usd-aud-rate-v26');
-    const status=document.getElementById('usd-aud-rate-status-v26');
-    if(input) input.value=rate().toFixed(4);
-    if(btn && !btn.dataset.bound){
-      btn.dataset.bound='1';
-      btn.addEventListener('click',function(){
-        const v=parseFloat(input.value);
-        if(!Number.isFinite(v)||v<=0){status.textContent='请输入有效汇率';return;}
-        localStorage.setItem(RATE_KEY,String(v));
-        status.textContent='已保存：1 USD = '+v.toFixed(4)+' AUD';
-        refresh();
-      });
+  function render(){
+    var home=document.getElementById('tab-home');
+    if(!home)return;
+    var old=document.getElementById('aud-v29-box');
+    if(!old){
+      old=document.createElement('div');
+      old.id='aud-v29-box';
+      old.style.cssText='margin:0 3px 10px;padding:9px 12px;border-radius:10px;background:#fff;border:1px solid rgba(0,0,0,.06);display:flex;justify-content:space-between;align-items:center;font-size:13px;';
+      var label=document.createElement('span');
+      label.textContent='TQQQ 折合澳元';
+      label.style.fontWeight='600';
+      var value=document.createElement('strong');
+      value.id='aud-v29-value';
+      value.textContent='A$0';
+      old.appendChild(label); old.appendChild(value);
+      home.insertBefore(old,home.firstChild);
     }
-    refresh();
+    var value=document.getElementById('aud-v29-value');
+    if(value)value.textContent=money(currentTqqq()*rate());
   }
-  document.addEventListener('DOMContentLoaded',bind);
-  document.addEventListener('click',function(e){
-    if(e.target.closest && e.target.closest('.tab-btn')) setTimeout(refresh,100);
-  });
-  setInterval(refresh,2000);
-})();
-</script>
-
-<script id="aud-v28-js">
-(function(){
-  const KEY='wealth_aud_usd_rate';
-  function getRate(){const n=parseFloat(localStorage.getItem(KEY));return Number.isFinite(n)&&n>0?n:1.42}
-  function money(n){return new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}).format(n||0)}
-  function getUSD(){
-    const names=['tqqqCurrentValue','currentTqqqValue','tqqqValue','currentValueTQQQ','tqqqMarketValue'];
-    for(const n of names){const v=Number(window[n]);if(Number.isFinite(v)&&v>0)return v}
-    return 0;
+  function settings(){
+    var tab=document.getElementById('tab-settings');
+    if(!tab||document.getElementById('aud-v29-settings'))return;
+    var box=document.createElement('div');
+    box.id='aud-v29-settings';
+    box.className='card';
+    box.style.marginBottom='12px';
+    box.innerHTML='<div class="card-title">USD / AUD 汇率</div><div style="display:flex;gap:8px;align-items:center"><span>1 USD =</span><input id="aud-v29-rate" type="number" inputmode="decimal" step="0.0001" min="0.0001" style="flex:1;min-width:0"><span>AUD</span></div><button id="aud-v29-save" type="button" class="btn" style="width:100%;margin-top:8px">保存汇率</button><div id="aud-v29-status" style="font-size:12px;color:#7b8494;margin-top:6px"></div>';
+    tab.insertBefore(box,tab.firstChild);
+    var input=document.getElementById('aud-v29-rate');
+    input.value=rate().toFixed(4);
+    document.getElementById('aud-v29-save').addEventListener('click',function(){
+      var n=parseFloat(input.value),st=document.getElementById('aud-v29-status');
+      if(!isFinite(n)||n<=0){st.textContent='请输入有效汇率';return}
+      localStorage.setItem(KEY,String(n));st.textContent='已保存';render();
+    });
   }
-  function refresh(){const el=document.getElementById('aud-total-value');if(el)el.textContent=money(getUSD()*getRate())}
-  function init(){
-    const input=document.getElementById('usd-aud-rate-v28'),btn=document.getElementById('save-usd-aud-rate-v28'),status=document.getElementById('usd-aud-rate-status-v28');
-    if(input)input.value=getRate().toFixed(4);
-    if(btn&&!btn.dataset.bound){btn.dataset.bound='1';btn.addEventListener('click',function(){
-      const v=parseFloat(input.value);
-      if(!Number.isFinite(v)||v<=0){status.textContent='请输入有效汇率';return}
-      localStorage.setItem(KEY,String(v));status.textContent='已保存';refresh()
-    })}
-    refresh()
-  }
+  function init(){render();settings();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.tab-btn'))setTimeout(refresh,100)});
+  document.addEventListener('click',function(e){
+    if(e.target.closest&&e.target.closest('.tab-btn'))setTimeout(function(){render();settings();},100);
+  });
 })();
 </script>
 </body>
