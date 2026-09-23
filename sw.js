@@ -1,4 +1,4 @@
-const CACHE='wealth-freedom-pwa-v2.4-feedback-zoomfix';
+const CACHE='wealth-freedom-pwa-v2.4-google-silent2';
 const ASSETS=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
