@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>财富自由 V2.1 · PWA 2.1</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>财富自由 V2.2 · PWA 2.2</title><style>
 :root{
   --bg:#f3f6fa;
   --surface:#ffffff;
@@ -262,7 +262,7 @@ canvas{width:100%;height:220px;display:block}
   .record{grid-template-columns:1fr 78px 88px}
 }
 </style><meta name="theme-color" content="#3563f5"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="财富自由"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"></head><body><main class="app">
-<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V2.1 · PWA 2.1</div></div></header>
+<header class="app-header"><div class="logo">↗</div><div><h1>财富自由</h1><div class="sub">Smart Investment · PWA V2.2 · PWA 2.2</div></div></header>
 <div id="tab-home" class="tab-page active"><div class="hint" style="margin:0 3px 10px">输入今天的 PE，立即查看本月建议</div><section class="card"><h2 class="title">本月智能定投</h2><label>纳斯达克 5年 PE</label><input id="pe" type="number" inputmode="decimal" step=".01" placeholder="例如 38.5"><div style="height:11px"></div><label>TQQQ · MA200</label><div class="ma"><button id="above" class="active">高于 MA200</button><button id="below">低于 MA200</button></div></section>
 <section class="card result"><div class="head"><div class="asset">🇨🇳 国内 QQQ</div><div id="qb" class="badge">等待 PE</div></div><div id="qs" class="state">输入 PE 后自动计算</div><div id="qa" class="amount">—</div><div id="qr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="qprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rq" class="primary">记录本次定投</button></section>
 <section class="card result"><div class="head"><div class="asset">🇺🇸 国外 TQQQ</div><div id="tb" class="badge">等待输入</div></div><div id="ts" class="state">PE + MA200 自动计算</div><div id="ta" class="amount">—</div><div id="tr" class="rule">策略金额</div><div style="margin-top:10px"><label>本次定投价格 <span class="tiny">可选 · 用于策略对比</span></label><input id="tprice" type="number" inputmode="decimal" min="0" step="any" placeholder="可不填，例如 100"></div><button id="rt" class="primary">记录本次定投</button></section>
@@ -285,6 +285,8 @@ canvas{width:100%;height:220px;display:block}
 <div class="stat"><div class="k">普通定投简单年化</div><div class="v" id="qqqCmpRegularSimpleAnnual">—</div></div>
 <div class="stat"><div class="k">智能定投复合年化</div><div class="v" id="qqqCmpSmartCagr">—</div></div>
 <div class="stat"><div class="k">普通定投复合年化</div><div class="v" id="qqqCmpRegularCagr">—</div></div>
+<div class="stat"><div class="k">智能定投 XIRR 年化</div><div class="v" id="qqqCmpSmartXirr">—</div></div>
+<div class="stat"><div class="k">普通定投 XIRR 年化</div><div class="v" id="qqqCmpRegularXirr">—</div></div>
 <div class="stat" style="grid-column:1/-1"><div class="k">智能定投相对普通定投</div><div class="v" id="qqqCmpExcess">—</div><div class="tiny" id="qqqCmpHint">请在 QQQ 定投记录中填写价格。</div></div>
 </div>
 </section>
@@ -302,14 +304,38 @@ canvas{width:100%;height:220px;display:block}
 <div class="stat"><div class="k">普通定投简单年化</div><div class="v" id="tqqqCmpRegularSimpleAnnual">—</div></div>
 <div class="stat"><div class="k">智能定投复合年化</div><div class="v" id="tqqqCmpSmartCagr">—</div></div>
 <div class="stat"><div class="k">普通定投复合年化</div><div class="v" id="tqqqCmpRegularCagr">—</div></div>
+<div class="stat"><div class="k">智能定投 XIRR 年化</div><div class="v" id="tqqqCmpSmartXirr">—</div></div>
+<div class="stat"><div class="k">普通定投 XIRR 年化</div><div class="v" id="tqqqCmpRegularXirr">—</div></div>
 <div class="stat" style="grid-column:1/-1"><div class="k">智能定投相对普通定投</div><div class="v" id="tqqqCmpExcess">—</div><div class="tiny" id="tqqqCmpHint">请在 TQQQ 定投记录中填写价格。</div></div>
 </div>
+</section>
+
+<section class="card">
+<h2 class="title">🧮 定投年化换算计算器</h2>
+<div class="hint" style="margin-bottom:14px">用于估算定期定额投资中「复合年化」与 XIRR 年化的对应关系。</div>
+<div class="form-grid">
+<div><label>每月定投金额</label><input id="calcMonthly" type="number" min="0" step="0.01" value="500"></div>
+<div><label>定投年数</label><input id="calcYears" type="number" min="1" step="1" value="5"></div>
+<div><label>XIRR 年化 (%)</label><input id="calcXirr" type="number" step="0.01" value="40"></div>
+<div><label>复合年化 (%)</label><input id="calcCagr" type="number" step="0.01" placeholder="自动计算"></div>
+</div>
+<div class="actions" style="margin-top:12px">
+<button type="button" class="primary" onclick="calcAnnualizedFromXirr()">XIRR → 复合年化</button>
+<button type="button" class="secondary" onclick="calcXirrFromCagr()">复合年化 → XIRR</button>
+</div>
+<div class="statgrid" style="margin-top:14px">
+<div class="stat"><div class="k">总投入</div><div class="v" id="calcInvested">—</div></div>
+<div class="stat"><div class="k">模拟终值</div><div class="v" id="calcFutureValue">—</div></div>
+<div class="stat"><div class="k">复合年化</div><div class="v" id="calcCagrResult">—</div></div>
+<div class="stat"><div class="k">XIRR 年化</div><div class="v" id="calcXirrResult">—</div></div>
+</div>
+<div class="tiny" style="margin-top:10px">按每月月末定投估算；实际 XIRR 会因具体定投日期不同而略有差异。</div>
 </section>
 <section class="card"><h2 class="title">当前价值 & 收益</h2><div class="grid2"><div><label>QQQ 当前价值</label><input id="qv" type="number" inputmode="decimal"></div><div><label>TQQQ 当前价值</label><input id="tv" type="number" inputmode="decimal"></div></div><button id="snapshot" class="primary">保存当前价值快照</button><div class="hint">保存快照后用于收益曲线、XIRR 和简单复合年化。</div></section>
 <section class="card"><h2 class="title">📸 历史价值快照</h2><div id="snapshots" class="table"></div></section><section class="card"><h2 class="title">收益分析</h2><div id="analysisHint" class="hint"></div><div class="statgrid"><div class="stat"><div class="k">QQQ 累计收益</div><div id="qp" class="v">—</div></div><div class="stat"><div class="k">QQQ 累计收益率</div><div id="qrtn" class="v">—</div></div><div class="stat"><div class="k">QQQ XIRR 年化</div><div id="qx" class="v">—</div></div><div class="stat"><div class="k">QQQ 简单复合年化</div><div id="qcagr" class="v">—</div></div><div class="stat"><div class="k">TQQQ 累计收益</div><div id="tp" class="v">—</div></div><div class="stat"><div class="k">TQQQ 累计收益率</div><div id="trtn" class="v">—</div></div><div class="stat"><div class="k">TQQQ XIRR 年化</div><div id="tx" class="v">—</div></div><div class="stat"><div class="k">TQQQ 简单复合年化</div><div id="tcagr" class="v">—</div></div></div></section>
 <section class="card"><h2 class="title">📈 收益曲线</h2><div class="actions"><button id="cq" class="secondary" style="color:var(--primary)">QQQ</button><button id="ct" class="secondary">TQQQ</button></div><canvas id="chart"></canvas><div class="legend"><span><i class="dot"></i>资产价值</span>　<span><i class="dot dot2"></i>累计投入</span></div></section>
 </div>
-<div id="tab-settings" class="tab-page"><section class="card"><h2 class="title">☁️ Google Drive 多设备同步</h2><div id="driveStatus" class="drive-status">未连接</div><div class="drive-actions"><button id="driveConnect" class="primary">连接 Google Drive</button><button id="driveUpload" class="secondary">上传到云端</button><button id="driveDownload" class="secondary">从云端恢复</button></div><div id="syncProgress" class="sync-progress"><div class="sync-progress-track"><div id="syncBar" class="sync-progress-bar"></div></div><div class="sync-progress-text"><span id="syncText">准备同步…</span><span id="syncPct">0%</span></div></div><div class="drive-note">同步本应用的基准金额、定投记录、历史价值快照和当前设置。数据同时保存在本机。首次连接会弹出 Google 授权窗口。</div></section><section class="card"><h2 class="title">设置</h2><div class="grid2"><div><label>版本</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:14px;font-weight:700">V2.1 · PWA 2.1</div></div><div><label>数据存储</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:12px;color:#596477">本机 + Google Drive</div></div></div><div class="hint">V2.1 · PWA 2.1：增加 Google Drive 多设备同步；支持上传、恢复、连接状态与同步进度。</div></section><section class="card"><h2 class="title">基准金额</h2><div class="grid2"><div><label>🇨🇳 QQQ · 1份</label><input id="qbv" type="number" inputmode="decimal"></div><div><label>🇺🇸 TQQQ · 1份</label><input id="tbv" type="number" inputmode="decimal"></div></div><button id="savebase" class="primary">保存基准金额</button></section>
+<div id="tab-settings" class="tab-page"><section class="card"><h2 class="title">☁️ Google Drive 多设备同步</h2><div id="driveStatus" class="drive-status">未连接</div><div class="drive-actions"><button id="driveConnect" class="primary">连接 Google Drive</button><button id="driveUpload" class="secondary">上传到云端</button><button id="driveDownload" class="secondary">从云端恢复</button></div><div id="syncProgress" class="sync-progress"><div class="sync-progress-track"><div id="syncBar" class="sync-progress-bar"></div></div><div class="sync-progress-text"><span id="syncText">准备同步…</span><span id="syncPct">0%</span></div></div><div class="drive-note">同步本应用的基准金额、定投记录、历史价值快照和当前设置。数据同时保存在本机。首次连接会弹出 Google 授权窗口。</div></section><section class="card"><h2 class="title">设置</h2><div class="grid2"><div><label>版本</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:14px;font-weight:700">V2.2 · PWA 2.2</div></div><div><label>数据存储</label><div style="height:46px;display:flex;align-items:center;padding:0 12px;border:1px solid #e5e9ef;border-radius:12px;background:#f8f9fc;font-size:12px;color:#596477">本机 + Google Drive</div></div></div><div class="hint">V2.2 · PWA 2.2：增加 Google Drive 多设备同步；支持上传、恢复、连接状态与同步进度。</div></section><section class="card"><h2 class="title">基准金额</h2><div class="grid2"><div><label>🇨🇳 QQQ · 1份</label><input id="qbv" type="number" inputmode="decimal"></div><div><label>🇺🇸 TQQQ · 1份</label><input id="tbv" type="number" inputmode="decimal"></div></div><button id="savebase" class="primary">保存基准金额</button></section>
 </div>
 <nav class="bottom-nav">
 <button class="tab-btn active" data-tab="home"><span>🏠</span><small>定投</small></button>
@@ -318,7 +344,50 @@ canvas{width:100%;height:220px;display:block}
 <button class="tab-btn" data-tab="settings"><span>⚙️</span><small>设置</small></button>
 </nav>
 </main>
-<script>const APP_VERSION='V2.1';</script><script>
+<script>const APP_VERSION='V2.2';
+function calcDcaFV(monthly,years,annual){
+ const n=Math.round(years*12),r=Math.pow(1+annual,1/12)-1;
+ if(Math.abs(r)<1e-12)return monthly*n;
+ return monthly*(Math.pow(1+r,n)-1)/r;
+}
+function calcDcaCagr(monthly,years,annual){
+ const invested=monthly*Math.round(years*12),fv=calcDcaFV(monthly,years,annual);
+ return invested>0?Math.pow(fv/invested,1/years)-1:NaN;
+}
+function calcDcaXirr(monthly,years,cagr){
+ const target=monthly*Math.round(years*12)*Math.pow(1+cagr,years);
+ const f=r=>calcDcaFV(monthly,years,r)-target;
+ let lo=-0.999999,hi=1,flo=f(lo),fhi=f(hi);
+ for(let i=0;i<80&&flo*fhi>0;i++){hi=hi*2+1;fhi=f(hi);}
+ if(flo*fhi>0)return NaN;
+ for(let i=0;i<100;i++){
+  const mid=(lo+hi)/2,fm=f(mid);
+  if(Math.abs(fm)<1e-8)return mid;
+  if(flo*fm<=0){hi=mid;fhi=fm}else{lo=mid;flo=fm}
+ }
+ return (lo+hi)/2;
+}
+function calcAnnualizedFromXirr(){
+ const m=Number($('calcMonthly').value)||0,y=Number($('calcYears').value)||0,x=Number($('calcXirr').value)/100;
+ if(!(m>0&&y>0)){toast('请输入每月定投金额和年数');return;}
+ const invested=m*Math.round(y*12),fv=calcDcaFV(m,y,x),cagr=calcDcaCagr(m,y,x);
+ $('calcInvested').textContent=money(invested,'tqqq');
+ $('calcFutureValue').textContent=money(fv,'tqqq');
+ $('calcCagr').value=(cagr*100).toFixed(2);
+ $('calcCagrResult').textContent=percent(cagr);
+ $('calcXirrResult').textContent=percent(x);
+}
+function calcXirrFromCagr(){
+ const m=Number($('calcMonthly').value)||0,y=Number($('calcYears').value)||0,c=Number($('calcCagr').value)/100;
+ if(!(m>0&&y>0)){toast('请输入每月定投金额和年数');return;}
+ const invested=m*Math.round(y*12),fv=invested*Math.pow(1+c,y),x=calcDcaXirr(m,y,c);
+ $('calcInvested').textContent=money(invested,'tqqq');
+ $('calcFutureValue').textContent=money(fv,'tqqq');
+ $('calcXirr').value=(x*100).toFixed(2);
+ $('calcCagrResult').textContent=percent(c);
+ $('calcXirrResult').textContent=percent(x);
+}
+</script><script>
 const K='wealthFreedomTrackerV3',D={qqq:2000,tqqq:500,ma:'above',records:[],snapshots:[]};let S=JSON.parse(localStorage.getItem(K)||'null')||D,chart='qqq';
 const $=id=>document.getElementById(id),today=()=>new Date().toISOString().slice(0,10),fmt=(n,c)=>(c==='CNY'?'¥':'$')+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
 function save(){localStorage.setItem(K,JSON.stringify(S))}
@@ -461,7 +530,7 @@ function switchTab(name){document.querySelectorAll('.tab-page').forEach(x=>x.cla
 document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 load();calc();snapshots();
 
-/* V2.1 · PWA 2.1 Google Drive sync — modeled on TodoCalendar's working Drive flow. */
+/* V2.2 · PWA 2.2 Google Drive sync — modeled on TodoCalendar's working Drive flow. */
 const DRIVE_CLIENT_ID='801960562511-1vkajpfcfd1m1ri4rlt9t1icbd0jdsge.apps.googleusercontent.com';
 const DRIVE_SCOPE='https://www.googleapis.com/auth/drive.file';
 const DRIVE_FILE_NAME='wealth-freedom-investment-sync-v1.json';
@@ -493,70 +562,98 @@ window.updateStrategyComparison=function(){
  const N=v=>{v=Number(v);return Number.isFinite(v)?v:0};
  const money=(v,a)=>(a==='tqqq'?'$':'¥')+Number(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
  const percent=v=>Number.isFinite(v)?(v*100).toFixed(2)+'%':'—';
- const configs={
-  qqq:{base:N(S.qqq)},
-  tqqq:{base:N(S.tqqq)}
- };
+ const configs={qqq:{base:N(S.qqq)},tqqq:{base:N(S.tqqq)}};
+
+ function xirr(cfs){
+  if(!cfs||cfs.length<2)return NaN;
+  const t0=new Date(cfs[0].date+'T00:00:00').getTime();
+  const f=r=>cfs.reduce((sum,c)=>{
+    const t=(new Date(c.date+'T00:00:00').getTime()-t0)/31557600000;
+    return sum+c.amount/Math.pow(1+r,t);
+  },0);
+  let lo=-0.999999,hi=1,flo=f(lo),fhi=f(hi);
+  for(let i=0;i<80&&flo*fhi>0;i++){hi=hi*2+1;fhi=f(hi);}
+  if(flo*fhi>0)return NaN;
+  for(let i=0;i<100;i++){
+   const mid=(lo+hi)/2,fm=f(mid);
+   if(Math.abs(fm)<1e-9)return mid;
+   if(flo*fm<=0){hi=mid;fhi=fm}else{lo=mid;flo=fm}
+  }
+  return (lo+hi)/2;
+ }
+
  function calc(asset){
-  const rows=R.filter(x=>x.asset===asset&&N(x.amount)>0&&N(x.price)>0).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  const rows=R.filter(x=>x.asset===asset&&N(x.amount)>0&&N(x.price)>0)
+    .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
   if(!rows.length)return null;
   const base=configs[asset].base;
   if(!(base>0))return null;
+
   const smartInvested=rows.reduce((z,x)=>z+N(x.amount),0);
   const smartShares=rows.reduce((z,x)=>z+N(x.amount)/N(x.price),0);
   const regularInvested=base*rows.length;
   const regularShares=rows.reduce((z,x)=>z+base/N(x.price),0);
-  const ss=snaps.filter(x=>x.asset===asset&&N(x.value)>0).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-  let current=0;
-  if(ss.length){
-    const snapshotValue=N(ss.at(-1).value);
-    // Snapshot values are total holdings. Convert to an implied unit price only when possible.
-    current=snapshotValue/smartShares;
-  }
+
+  const ss=snaps.filter(x=>x.asset===asset&&N(x.value)>0)
+    .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+
+  // Use the latest current-value snapshot when available; otherwise use latest recorded price.
+  let current=ss.length?N(ss.at(-1).value)/smartShares:0;
   if(!(current>0))current=N(rows.at(-1).price);
-  const smartValue=smartShares*current, regularValue=regularShares*current;
+
+  const smartValue=smartShares*current;
+  const regularValue=regularShares*current;
   const startMs=new Date(rows[0].date+'T00:00:00').getTime();
   const endMs=new Date(rows.at(-1).date+'T00:00:00').getTime();
-  const years=Math.max((endMs-startMs)/31557600000, 1/365);
-  const smartTotalReturn=smartValue/smartInvested-1;
-  const regularTotalReturn=regularValue/regularInvested-1;
-  // Simple annualization: total return divided by elapsed years.
-  const smartSimpleAnnual=smartTotalReturn/years;
-  const regularSimpleAnnual=regularTotalReturn/years;
-  // Compound annualization for the accumulated portfolio value.
-  const smartCagr=(smartValue/smartInvested)>0?Math.pow(smartValue/smartInvested,1/years)-1:NaN;
-  const regularCagr=(regularValue/regularInvested)>0?Math.pow(regularValue/regularInvested,1/years)-1:NaN;
-  return {smartInvested,regularInvested,smartValue,regularValue,
-    smartReturn:smartTotalReturn,regularReturn:regularTotalReturn,
-    smartSimpleAnnual,regularSimpleAnnual,smartCagr,regularCagr,
+  const years=Math.max((endMs-startMs)/31557600000,1/365);
+
+  const smartReturn=smartValue/smartInvested-1;
+  const regularReturn=regularValue/regularInvested-1;
+
+  // Comparison CAGR: total contributions are treated as the initial capital.
+  const smartCagr=smartValue>0?Math.pow(smartValue/smartInvested,1/years)-1:NaN;
+  const regularCagr=regularValue>0?Math.pow(regularValue/regularInvested,1/years)-1:NaN;
+
+  // XIRR: each contribution is a separate dated cash flow.
+  const smartCF=rows.map(x=>({date:x.date,amount:-N(x.amount)}));
+  const regularCF=rows.map(x=>({date:x.date,amount:-base}));
+  smartCF.push({date:rows.at(-1).date,amount:smartValue});
+  regularCF.push({date:rows.at(-1).date,amount:regularValue});
+  const smartXirr=xirr(smartCF);
+  const regularXirr=xirr(regularCF);
+
+  return {smartInvested,regularInvested,smartValue,regularValue,smartReturn,regularReturn,
+    smartCagr,regularCagr,smartXirr,regularXirr,
     excess:smartValue-regularValue,excessPct:regularValue?smartValue/regularValue-1:NaN,base};
  }
+
  function render(asset,d){
-  const p=asset;
-  const $=id=>document.getElementById(id);
-  const ids=['SmartInvested','RegularInvested','SmartValue','RegularValue','SmartReturn','RegularReturn','SmartSimpleAnnual','RegularSimpleAnnual','SmartCagr','RegularCagr','Excess'];
+  const p=asset,$=id=>document.getElementById(id);
+  const ids=['SmartInvested','RegularInvested','SmartValue','RegularValue','SmartReturn','RegularReturn',
+    'SmartCagr','RegularCagr','SmartXirr','RegularXirr','Excess'];
   if(!d){
    ids.forEach(k=>{if($(p+'Cmp'+k))$(p+'Cmp'+k).textContent='—'});
    if($(p+'CmpHint'))$(p+'CmpHint').textContent='该标的目前没有足够的价格数据。';
    return;
   }
-  $(''+p+'CmpSmartInvested').textContent=money(d.smartInvested,asset);
-  $(''+p+'CmpRegularInvested').textContent=money(d.regularInvested,asset);
-  $(''+p+'CmpSmartValue').textContent=money(d.smartValue,asset);
-  $(''+p+'CmpRegularValue').textContent=money(d.regularValue,asset);
-  $(''+p+'CmpSmartReturn').textContent=percent(d.smartReturn);
-  $(''+p+'CmpRegularReturn').textContent=percent(d.regularReturn);
-  $(p+'CmpSmartSimpleAnnual').textContent=percent(d.smartSimpleAnnual);
-  $(p+'CmpRegularSimpleAnnual').textContent=percent(d.regularSimpleAnnual);
+  $(p+'CmpSmartInvested').textContent=money(d.smartInvested,asset);
+  $(p+'CmpRegularInvested').textContent=money(d.regularInvested,asset);
+  $(p+'CmpSmartValue').textContent=money(d.smartValue,asset);
+  $(p+'CmpRegularValue').textContent=money(d.regularValue,asset);
+  $(p+'CmpSmartReturn').textContent=percent(d.smartReturn);
+  $(p+'CmpRegularReturn').textContent=percent(d.regularReturn);
   $(p+'CmpSmartCagr').textContent=percent(d.smartCagr);
   $(p+'CmpRegularCagr').textContent=percent(d.regularCagr);
-  const e=$(p+'CmpExcess'); e.textContent=money(d.excess,asset);
+  $(p+'CmpSmartXirr').textContent=percent(d.smartXirr);
+  $(p+'CmpRegularXirr').textContent=percent(d.regularXirr);
+  const e=$(p+'CmpExcess');e.textContent=money(d.excess,asset);
   e.className='v '+(d.excess>0?'pos':d.excess<0?'neg':'');
   $(p+'CmpHint').textContent='相对普通定投 '+percent(d.excessPct)+'；普通定投按 '+money(d.base,asset)+' / 月基准计算。';
  }
  render('qqq',calc('qqq'));
  render('tqqq',calc('tqqq'));
 };
+
 window.addEventListener('load',()=>setTimeout(updateStrategyComparison,300));
 })();
 </script>
