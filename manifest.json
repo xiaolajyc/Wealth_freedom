@@ -2,11 +2,10 @@
   "name": "财富自由",
   "short_name": "财富自由",
   "start_url": "./",
-  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#f3f6fa",
   "theme_color": "#3563f5",
+  "lang": "zh-CN",
   "icons": [
     {
       "src": "icon-192.png",
